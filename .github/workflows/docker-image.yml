@@ -8,14 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:latest
-        options: --privileged
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build Spring Boot App
         run: docker build -t spring-boot-app -f api/Dockerfile .
