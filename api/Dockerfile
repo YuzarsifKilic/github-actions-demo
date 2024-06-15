@@ -5,7 +5,7 @@ FROM maven:3.8.5-openjdk-17-slim AS build
 WORKDIR /app
 
 # Copy pom.xml and project dependencies list
-COPY pom.xml .
+COPY pom.xml /app
 
 # Build application
 RUN mvn clean package -DskipTests
