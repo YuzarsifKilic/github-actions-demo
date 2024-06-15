@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - api/**
+      - .github/workflows/pipeline-backend.yml
 
 jobs:
   compile:
