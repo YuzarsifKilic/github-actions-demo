@@ -1,27 +1,19 @@
-# Base image
-FROM maven:latest AS build
-
-# Set working directory
-WORKDIR /app
-
-# Copy pom.xml and project dependencies list
+# Build stage
+FROM maven:3.8.7-openjdk-18 AS build
+WORKDIR /build
 COPY pom.xml .
-
 RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-COPY src /app/src
-
-# Build application
-RUN mvn clean package
-
-# Second stage for creating a smaller image
-FROM openjdk:21-jdk-slim
-
-# Set working directory
+# Runtime stage
+FROM amazoncorretto:21
+ARG APP_VERSION=1.0.0
 WORKDIR /app
+COPY --from=build /build/target/api-*.jar /app/
 
-# Copy the built artifact from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8088
 
-# Command to run the application
-CMD ["java", "-jar", "app.jar"]
+ENV JAR_VERSION=${APP_VERSION}
+
+CMD java -jar api-${JAR_VERSION}.jar

@@ -1,0 +1,94 @@
+name: Backend API Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - api/**
+
+jobs:
+  compile:
+    runs-on: self-hosted
+    name: Compile Project
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+      - name: Running Unit Tests
+        run: |
+          cd api
+          ./mvnw clean compile
+
+  unite-tests:
+    runs-on: self-hosted
+    name: Unite Tests
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+      - name: Running Unit Tests
+        run: |
+          cd api
+          ./mvnw clean test
+
+  build:
+    runs-on: self-hosted
+    name: Build backend
+    needs: [compile, unite-tests]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+      - name: Compile Project
+        run: |
+          cd api
+          ./mvnw clean compile
+
+  build-image:
+    name: Build Docker Image
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+      - name: Extract Project Version
+        id: extract_version
+        run: |
+          cd api
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: api
+          file: api/Dockerfile
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/api:${{ steps.extract_version.outputs.VERSION }}
+          build-args: |
+            APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
