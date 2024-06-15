@@ -4,7 +4,7 @@ WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Runtime stage
 FROM amazoncorretto:21
