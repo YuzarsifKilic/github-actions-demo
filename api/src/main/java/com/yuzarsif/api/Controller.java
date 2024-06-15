@@ -12,4 +12,9 @@ public class Controller {
     public String demo() {
         return "Demo";
     }
+
+    @GetMapping("/demo")
+    public String demo2() {
+        return "New Demo";
+    }
 }
