@@ -23,7 +23,7 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
       - name: Grant execute permission for gradlew
-        run: chmod +x api/gradlew
+        run: chmod +x api/mvnw
       - name: Running Unit Tests
         run: |
           cd api
@@ -43,7 +43,7 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
       - name: Grant execute permission for gradlew
-        run: chmod +x api/gradlew
+        run: chmod +x api/mvnw
       - name: Running Unit Tests
         run: |
           cd api
@@ -64,7 +64,7 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
       - name: Grant execute permission for gradlew
-        run: chmod +x api/gradlew
+        run: chmod +x api/mvnw
       - name: Compile Project
         run: |
           cd api
@@ -81,7 +81,7 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
       - name: Grant execute permission for gradlew
-        run: chmod +x api/gradlew
+        run: chmod +x api/mvnw
       - name: Extract Project Version
         id: extract_version
         run: |
