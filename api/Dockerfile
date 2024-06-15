@@ -1,23 +1,14 @@
-# Base image
-FROM maven:3.8.5-openjdk-17-slim AS build
-
-# Set working directory
-WORKDIR /app
-
-# Copy pom.xml and project dependencies list
-COPY pom.xml /app
-
-# Build application
-RUN mvn clean package -DskipTests
-
-# Second stage for creating a smaller image
+# Use AdoptOpenJDK 11 as base image
 FROM openjdk:21-jdk-slim
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the built artifact from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the packaged jar file into the container
+COPY target/*.jar app.jar
 
-# Command to run the application
+# Expose the port that the Spring Boot application will run on
+EXPOSE 8080
+
+# Command to run the Spring Boot application
 CMD ["java", "-jar", "app.jar"]
