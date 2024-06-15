@@ -1,0 +1,23 @@
+version: "2.22"
+
+services:
+  spring-boot-app:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - app-network
+
+  angular-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - app-network
+
+networks:
+  app-network:
