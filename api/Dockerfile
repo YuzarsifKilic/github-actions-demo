@@ -1,9 +1,24 @@
-FROM openjdk:21-jdk-slim
+# Base image
+FROM maven:3.8.5-openjdk-17-slim AS build
 
+# Set working directory
 WORKDIR /app
 
-COPY target/api-0.0.1-SNAPSHOT.jar app.jar
+# Copy pom.xml and project dependencies list
+COPY pom.xml .
+COPY src ./src
 
-EXPOSE 8080
+# Build application
+RUN mvn clean package -DskipTests
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Second stage for creating a smaller image
+FROM openjdk:21-jdk-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy the built artifact from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Command to run the application
+CMD ["java", "-jar", "app.jar"]
