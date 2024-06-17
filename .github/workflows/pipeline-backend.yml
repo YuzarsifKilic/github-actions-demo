@@ -131,6 +131,14 @@ jobs:
         run: | 
           echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }}"
 
+      - name: Check the version
+        run: | 
+          echo "Version: ${{ env.VERSION }}"
+
+      - name: Check the version 2
+        run: | 
+          echo ${{ env.VERSION }}
+
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
