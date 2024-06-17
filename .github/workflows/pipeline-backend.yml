@@ -128,7 +128,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Print Docker Image Name
-        run:
+        run: | 
           echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ steps.extract_version.outputs.VERSION }}"
 
       - name: Deploy to Google Cloud Run
