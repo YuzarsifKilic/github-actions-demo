@@ -29,6 +29,7 @@ jobs:
 
       - name: Build Angular Application
         run: |
+          cd frontend
           npm run build --prod
 
   build-image:
