@@ -135,5 +135,5 @@ jobs:
           --image=${{ secrets.DOCKER_USERNAME }}/api:latest \
           --platform=managed \
           --region=europe-west3 \
-          --allow-unauthenticated
+          --allow-unauthenticated \
           --revision-suffix=$(date +%s)
