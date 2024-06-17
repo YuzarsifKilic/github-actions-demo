@@ -129,12 +129,12 @@ jobs:
 
       - name: Print Docker Image Name
         run: | 
-          echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ needs.build-image.outputs.VERSION }}"
+          echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }}"
 
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
-          --image="${{ secrets.DOCKER_USERNAME }}/api:${{ needs.build-image.outputs.VERSION }}" \
+          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }} \
           --platform=managed \
           --region=europe-west3 \
           --allow-unauthenticated
