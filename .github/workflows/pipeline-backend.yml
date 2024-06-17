@@ -128,6 +128,9 @@ jobs:
       - name: Set GCP Project
         run: gcloud config set project ${{ secrets.GCP_PROJECT }}
 
+      - name: Activate Service Account
+        run: gcloud auth activate-service-account --key-file ${{ secrets.GCP_SA_KEY }}
+
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
