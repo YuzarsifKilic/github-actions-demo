@@ -84,7 +84,7 @@ jobs:
 
       - name: Deploy to Google Cloud Run
         run: |
-          gcloud run deploy my-spring-boot-app \
+          gcloud run deploy my-angular-app \
           --image=${{ secrets.DOCKER_USERNAME }}/frontend:latest \
           --platform=managed \
           --region=europe-west3 \
