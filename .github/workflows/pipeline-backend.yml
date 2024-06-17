@@ -125,6 +125,9 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
+      - name: Set GCP Project
+        run: gcloud config set project ${{ secrets.GCP_PROJECT }}
+
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
