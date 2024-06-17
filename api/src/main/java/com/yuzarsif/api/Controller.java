@@ -20,6 +20,6 @@ public class Controller {
 
     @GetMapping("/google-cloud")
     public String googleCloud() {
-        return "Google Cloud";
+        return "Google Cloud 2";
     }
 }
