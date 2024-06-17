@@ -17,4 +17,9 @@ public class Controller {
     public String demo2() {
         return "New Demo";
     }
+
+    @GetMapping("/google-cloud")
+    public String googleCloud() {
+        return "Google Cloud";
+    }
 }
