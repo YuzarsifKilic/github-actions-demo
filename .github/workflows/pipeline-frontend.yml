@@ -89,4 +89,5 @@ jobs:
           --platform=managed \
           --region=europe-west3 \
           --allow-unauthenticated \
-          --revision-suffix=$(date +%s)
+          --revision-suffix=$(date +%s) \
+          --port=8080
