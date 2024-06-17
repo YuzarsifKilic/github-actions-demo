@@ -94,7 +94,6 @@ jobs:
           cd api
           VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -130,7 +129,7 @@ jobs:
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
-          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ needs.build-image.outputs.IMAGE_TAG }} \
+          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }} \
           --platform managed \
           --region europe-west3 \
           --allow-unauthenticated
