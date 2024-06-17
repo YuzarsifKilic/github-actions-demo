@@ -127,12 +127,14 @@ jobs:
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Print Docker Image Name
+        run:
+          echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ steps.extract_version.outputs.VERSION }}"
+
       - name: Deploy to Google Cloud Run
-        env:
-          VERSION: ${{ steps.extract_version.outputs.VERSION }}
         run: |
           gcloud run deploy my-spring-boot-app \
-          --image=${{ secrets.DOCKER_USERNAME }}/api:${VERSION} \
+          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ steps.extract_version.outputs.VERSION }} \
           --platform managed \
           --region europe-west3 \
           --allow-unauthenticated
