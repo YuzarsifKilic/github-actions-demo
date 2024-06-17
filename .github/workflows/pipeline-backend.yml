@@ -134,7 +134,7 @@ jobs:
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
-          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ needs.build-image.outputs.VERSION }} \
-          --platform managed \
-          --region europe-west3 \
+          --image="${{ secrets.DOCKER_USERNAME }}/api:${{ needs.build-image.outputs.VERSION }}" \
+          --platform=managed \
+          --region=europe-west3 \
           --allow-unauthenticated
