@@ -106,7 +106,9 @@ jobs:
           context: api
           file: api/Dockerfile
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}/api:${{ steps.extract_version.outputs.VERSION }}
+          tags: | 
+            ${{secrets.DOCKER_USERNAME}}/api:${{ steps.extract_version.outputs.VERSION }}
+            ${{secrets.DOCKER_USERNAME}}/api:latest
           build-args: |
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
@@ -127,22 +129,10 @@ jobs:
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Print Docker Image Name
-        run: | 
-          echo "Docker image name: ${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }}"
-
-      - name: Check the version
-        run: | 
-          echo "Version: ${{ env.VERSION }}"
-
-      - name: Check the version 2
-        run: | 
-          echo ${{ env.VERSION }}
-
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy my-spring-boot-app \
-          --image=${{ secrets.DOCKER_USERNAME }}/api:${{ env.VERSION }} \
+          --image=${{ secrets.DOCKER_USERNAME }}/api:latest \
           --platform=managed \
           --region=europe-west3 \
           --allow-unauthenticated
