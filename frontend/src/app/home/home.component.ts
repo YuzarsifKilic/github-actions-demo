@@ -11,6 +11,6 @@ export class HomeComponent {
   constructor(private demoService: DemoService) { }
 
   ngOnInit() {
-    this.demoService.getDemo();
+    this.demoService.demo();
   }
 }
