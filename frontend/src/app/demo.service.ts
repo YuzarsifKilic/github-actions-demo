@@ -10,10 +10,13 @@ export class DemoService {
 
   apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private axios: Axios) { }
 
   demo() {
-    return this.http.get(this.apiUrl + '/api/demo');
+    this.axios.get(this.apiUrl + '/api/demo')
+      .then(response => {
+        console.log(response);
+      })
   }
 
 }

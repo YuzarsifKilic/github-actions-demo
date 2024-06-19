@@ -12,10 +12,6 @@ export class HomeComponent {
   constructor(private demoService: DemoService) { }
 
   ngOnInit() {
-    this.demoService.demo()
-      .pipe(first())
-      .subscribe((resp) => {
-        console.log(resp);
-      })
+    this.demoService.demo();
   }
 }
