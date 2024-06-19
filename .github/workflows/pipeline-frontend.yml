@@ -64,7 +64,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/frontend:${{ steps.extract_version.outputs.VERSION }}
             ${{secrets.DOCKER_USERNAME}}/frontend:latest
-          build-args:
+          build-args: |
             API_URL=${{ secrets.API_URL }}
 
   deploy:
