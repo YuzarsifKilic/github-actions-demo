@@ -12,6 +12,9 @@ export class HomeComponent {
   constructor(private demoService: DemoService) { }
 
   ngOnInit() {
-    this.demoService.demo();
+    this.demoService.demo()
+      .then(response => {
+        console.log(response);
+      })
   }
 }

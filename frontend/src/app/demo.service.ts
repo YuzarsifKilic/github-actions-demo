@@ -12,11 +12,8 @@ export class DemoService {
 
   constructor(private axios: Axios) { }
 
-  demo() {
-    this.axios.get(this.apiUrl + '/api/demo')
-      .then(response => {
-        console.log(response);
-      })
+  async demo() {
+    const resp = await this.axios.get(this.apiUrl + '/api/demo');
   }
 
 }
