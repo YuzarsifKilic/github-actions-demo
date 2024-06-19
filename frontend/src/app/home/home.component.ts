@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {DemoService} from "../demo.service";
+import {first} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,10 @@ export class HomeComponent {
   constructor(private demoService: DemoService) { }
 
   ngOnInit() {
-    this.demoService.demo();
+    this.demoService.demo()
+      .pipe(first())
+      .subscribe((resp) => {
+        console.log(resp);
+      })
   }
 }
