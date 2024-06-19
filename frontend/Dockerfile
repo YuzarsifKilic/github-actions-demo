@@ -8,10 +8,6 @@ RUN npm install
 
 COPY . .
 
-ARG API_URL
-ENV API_URL=$API_URL
-RUN echo "export const environment = { production: true, apiUrl: '$API_URL' };" > src/environments/environment.prod.ts
-
 RUN npm run build
 
 FROM nginx:alpine
@@ -19,6 +15,10 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+
+ARG API_URL
+ENV API_URL=$API_URL
+RUN echo "window._env_ = {API_URL: '$API_URL'};" > /usr/share/nginx/html/env.js
 
 EXPOSE 80
 
