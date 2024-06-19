@@ -111,6 +111,7 @@ jobs:
             ${{secrets.DOCKER_USERNAME}}/api:latest
           build-args: |
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
 
   deploy:
     name: Deploy to Google Cloud

@@ -1,0 +1,3 @@
+application:
+  security:
+    allowed-origin: ${FRONTEND_URL}
