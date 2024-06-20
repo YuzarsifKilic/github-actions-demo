@@ -1,39 +1,32 @@
-# Stage 1: Build the Angular application
-FROM node:18 AS build
+# Temel görüntü olarak Node.js kullanıyoruz (LTS sürümü önerilir)
+FROM node:18-alpine
 
+# Uygulama dizinini oluşturuyoruz
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm install
+# Angular uygulamasının kaynak kodunu kopyalıyoruz
+COPY package*.json ./
 
+# Bağımlılıkları kuruyoruz
+RUN npm ci
+
+# Angular uygulamasının kaynak kodunu kopyalıyoruz
 COPY . .
 
-ARG API_URL
-ENV API_URL=${API_URL}
-
-# Hata ayıklama için environment değişkenlerini yazdırma
-RUN echo "Building with API_URL: ${API_URL}"
-
-# Build işlemi
+# Uygulamayı üretim modunda oluşturuyoruz
 RUN npm run build --prod
 
-RUN ls -la
+# Üretim çıktı dizinini belirliyoruz
+WORKDIR /app/dist/angular-app
 
-RUN pwd
+# HTTP sunucusu olarak Nginx kullanıyoruz
+FROM nginx:latest
 
-# Create env.js file
-RUN mkdir -p /app/dist/frontend/browser/assets && echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/browser/assets/env.js
-
-# Stage 2: Serve the Angular application with Nginx
-FROM nginx:alpine
-
+# Nginx yapılandırma dosyasını kopyalıyoruz
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+# Angular uygulamasının statik dosyalarını kopyalıyoruz
+COPY . /usr/share/nginx/html
 
-# Copy custom nginx configuration
-
-
-EXPOSE 80
-
+# Nginx'i başlatıyoruz
 CMD ["nginx", "-g", "daemon off;"]
