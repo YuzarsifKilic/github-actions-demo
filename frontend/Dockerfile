@@ -1,32 +1,26 @@
-# Temel görüntü olarak Node.js kullanıyoruz (LTS sürümü önerilir)
-FROM node:18-alpine
+# Angular Dockerfile
 
-# Uygulama dizinini oluşturuyoruz
+# 1. Stage: Build Angular
+FROM node:18 AS build
+
 WORKDIR /app
 
-# Angular uygulamasının kaynak kodunu kopyalıyoruz
 COPY package*.json ./
+RUN npm install
 
-# Bağımlılıkları kuruyoruz
-RUN npm ci
-
-# Angular uygulamasının kaynak kodunu kopyalıyoruz
 COPY . .
 
-# Uygulamayı üretim modunda oluşturuyoruz
+ARG NG_APP_API_URL
+ENV NG_APP_API_URL=${NG_APP_API_URL}
+
 RUN npm run build --prod
 
-# Üretim çıktı dizinini belirliyoruz
-WORKDIR /app/dist/angular-app
+# 2. Stage: Serve with Nginx
+FROM nginx:alpine
 
-# HTTP sunucusu olarak Nginx kullanıyoruz
-FROM nginx:latest
-
-# Nginx yapılandırma dosyasını kopyalıyoruz
+COPY --from=build /app/dist/* /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Angular uygulamasının statik dosyalarını kopyalıyoruz
-COPY . /usr/share/nginx/html
+EXPOSE 80
 
-# Nginx'i başlatıyoruz
 CMD ["nginx", "-g", "daemon off;"]
