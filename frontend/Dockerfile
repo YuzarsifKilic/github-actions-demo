@@ -17,6 +17,8 @@ RUN echo "Building with API_URL: ${API_URL}"
 # Build işlemi
 RUN npm run build --prod
 
+RUN echo "ls -la"
+
 # Create env.js file
 RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/assets/env.js
 
