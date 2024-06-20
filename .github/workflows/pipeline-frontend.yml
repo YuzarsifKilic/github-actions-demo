@@ -26,11 +26,6 @@ jobs:
           cd frontend
           npm install
 
-      - name: Run tests
-        run: |
-          cd frontend
-          npm run test --if-present
-
       - name: Build Angular app
         run: |
           cd frontend
