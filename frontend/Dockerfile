@@ -1,25 +1,23 @@
-FROM node:18 AS build
+# Angular uygulamanızın Dockerfile'ı
+FROM node:14-alpine as build
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-
 RUN npm install
 
 COPY . .
-
 RUN npm run build --prod
 
 FROM nginx:alpine
+COPY --from=build /app/dist/your-angular-app /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# NGINX konfigürasyon dosyasını değiştirme
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+# Environment Variables için template ve script dosyalarını kopyalama
+COPY src/assets/env.template.js /usr/share/nginx/html/assets/env.template.js
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
 
-ARG API_URL
-ENV API_URL=$API_URL
-RUN echo "window._env_ = {API_URL: '$API_URL'};" > /usr/share/nginx/html/env.js
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/docker-entrypoint.d/env.sh"]
