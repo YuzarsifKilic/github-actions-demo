@@ -1,5 +1,5 @@
-# Angular uygulamanızın Dockerfile'ı
-FROM node:14-alpine as build
+# Stage 1: Build the Angular application
+FROM node:14 AS build
 
 WORKDIR /app
 
@@ -7,17 +7,23 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build --prod
 
+ARG API_URL
+ENV API_URL=${API_URL}
+
+RUN npm run build -- --prod
+
+# Create env.js file
+RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/your-angular-app/assets/env.js
+
+# Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
+
 COPY --from=build /app/dist/your-angular-app /usr/share/nginx/html
 
-# NGINX konfigürasyon dosyasını değiştirme
+# Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Environment Variables için template ve script dosyalarını kopyalama
-COPY src/assets/env.template.js /usr/share/nginx/html/assets/env.template.js
-COPY env.sh /docker-entrypoint.d/env.sh
-RUN chmod +x /docker-entrypoint.d/env.sh
+EXPOSE 80
 
-CMD ["/docker-entrypoint.d/env.sh"]
+CMD ["nginx", "-g", "daemon off;"]
