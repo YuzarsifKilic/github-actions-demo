@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-
-env:
-  DOCKER_IMAGE: your-dockerhub-username/your-image-name
+      - master
+    paths:
+      - frontend/**
+      - .github/workflows/pipeline-frontend.yml
 
 jobs:
   build:
