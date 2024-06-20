@@ -75,4 +75,5 @@ jobs:
           --region=europe-west3 \
           --allow-unauthenticated \
           --revision-suffix=$(date +%s) \
-          --set-env-vars API_URL=${{ secrets.API_URL }}
+          --set-env-vars API_URL=${{ secrets.API_URL }} \\
+          --port=80
