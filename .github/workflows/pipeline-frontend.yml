@@ -69,7 +69,7 @@ jobs:
 
       - name: Deploy to Google Cloud Run
         run: |
-          gcloud run deploy my-angular-app \
+          gcloud run deploy my-frontend-app \
           --image=${{ secrets.DOCKER_USERNAME }}/frontend:latest \
           --platform=managed \
           --region=europe-west3 \
