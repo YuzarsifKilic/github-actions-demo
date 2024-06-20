@@ -22,7 +22,7 @@ RUN ls -la
 RUN pwd
 
 # Create env.js file
-RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/browser/assets/env.js
+RUN mkdir -p /app/dist/frontend/browser/assets && echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/browser/assets/env.js
 
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
