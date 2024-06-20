@@ -22,13 +22,18 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: | 
+          cd frontend
+          npm install
 
       - name: Run tests
-        run: npm run test --if-present
+        run: |
+          cd frontend
+          npm run test --if-present
 
       - name: Build Angular app
         run: |
+          cd frontend
           npm run build --prod
         env:
           NG_APP_API_URL: ${{ secrets.API_URL }}
