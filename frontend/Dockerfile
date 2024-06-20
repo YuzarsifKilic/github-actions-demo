@@ -27,11 +27,11 @@ RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/browser/
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
 
-COPY --from=build /app/dist/your-angular-app /usr/share/nginx/html
+COPY --from=build /app/dist/frontend /usr/share/nginx/html
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
-CMD ["nginx", "-g",
+CMD ["nginx", "-g", "daemon off;"]
