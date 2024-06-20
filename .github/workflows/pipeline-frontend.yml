@@ -47,7 +47,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{secrets.DOCKER_USERNAME}}}/frontend:latest
+          tags: ${{secrets.DOCKER_USERNAME}}/frontend:latest
 
   deploy:
     name: Deploy to Google Cloud
