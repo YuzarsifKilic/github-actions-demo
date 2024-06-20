@@ -18,7 +18,7 @@ RUN echo "Building with API_URL: ${API_URL}"
 RUN npm run build --prod
 
 # Create env.js file
-RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/your-angular-app/assets/env.js
+RUN echo "window.env = { API_URL: '${API_URL}' };" > /app/dist/frontend/assets/env.js
 
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
